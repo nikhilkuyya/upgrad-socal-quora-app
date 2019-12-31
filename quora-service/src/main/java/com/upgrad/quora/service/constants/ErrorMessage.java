@@ -2,7 +2,9 @@ package com.upgrad.quora.service.constants;
 
 public enum ErrorMessage {
     UserNameAlreadyExist("Try any other Username, this Username has already been taken"),
-    UserEmailIdAlreadyExist("This user has already been registered, try with any other emailId");
+    UserEmailIdAlreadyExist("This user has already been registered, try with any other emailId"),
+    UserNameDoesnotExist("This username does not exist"),
+    PasswordInvalidInput("Password failed");
 
     private String errorMessage;
     ErrorMessage(final String errorMessage) {

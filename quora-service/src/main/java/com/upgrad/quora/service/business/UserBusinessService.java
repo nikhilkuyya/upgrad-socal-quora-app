@@ -2,13 +2,19 @@ package com.upgrad.quora.service.business;
 
 import com.upgrad.quora.service.constants.ErrorCodeConstants;
 import com.upgrad.quora.service.constants.ErrorMessage;
+import com.upgrad.quora.service.dao.UserAuthTokenDao;
 import com.upgrad.quora.service.dao.UserDao;
+import com.upgrad.quora.service.entity.UserAuthTokenEntity;
 import com.upgrad.quora.service.entity.UserEntity;
+import com.upgrad.quora.service.exception.AuthenticationFailedException;
 import com.upgrad.quora.service.exception.SignUpRestrictedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.ZonedDateTime;
+import java.util.UUID;
 
 
 @Service
@@ -18,13 +24,14 @@ public class UserBusinessService {
     private UserDao userDao;
 
     @Autowired
+    private UserAuthTokenDao userAuthTokenDao;
+
+    @Autowired
     private PasswordCryptographyProvider passwordCryptoGraphyProvider;
 
-    //TODO: Invalid input -> handle case
     @Transactional(propagation = Propagation.REQUIRED)
     public UserEntity signup(UserEntity userEntity) throws SignUpRestrictedException {
 
-     if( userEntity != null ) {
         UserEntity usersBySameUserName = userDao.getUserByUserName(userEntity.getUsername());
         UserEntity userBySameEmail = userDao.getUserByEmail(userEntity.getEmail());
 
@@ -39,7 +46,35 @@ public class UserBusinessService {
          userEntity.setSalt(encrytionData[0]);
          userEntity.setPassword(encrytionData[1]);
          return userDao.createUser(userEntity);
-     }
-     return  null;
     }
+
+    @Transactional
+    public UserAuthTokenEntity signin(final String username,
+                                      final String password) throws AuthenticationFailedException {
+        UserEntity userEntity =  userDao.getUserByUserName(username);
+        if(userEntity == null) {
+            throw  new AuthenticationFailedException(ErrorCodeConstants.UserNameNotValidInput.getCode(),
+                    ErrorMessage.UserNameDoesnotExist.getErrorMessage());
+        }
+
+        final String salt = userEntity.getSalt();
+        final String encryptedInputPassword = PasswordCryptographyProvider.encrypt(password,salt);
+        final String actualPassword = userEntity.getPassword();
+        if(!actualPassword.equals(encryptedInputPassword)){
+            throw new AuthenticationFailedException(ErrorCodeConstants.PasswordInvalidInput.getCode(),
+                    ErrorMessage.PasswordInvalidInput.getErrorMessage());
+        }
+
+        JwtTokenProvider jwtTokenProvider = new JwtTokenProvider(encryptedInputPassword);
+        ZonedDateTime currentTime = ZonedDateTime.now();
+        ZonedDateTime expiresAt = currentTime.plusHours(8);
+        UserAuthTokenEntity userAuthTokenEntity = new UserAuthTokenEntity();
+        userAuthTokenEntity.setUuid(UUID.randomUUID().toString());
+        userAuthTokenEntity.setUserId(userEntity.getId());
+        userAuthTokenEntity.setLoginAt(currentTime);
+        userAuthTokenEntity.setExpiresAt(expiresAt);
+        userAuthTokenEntity.setAccessToken(jwtTokenProvider.generateToken(userEntity.getUuid(),currentTime,expiresAt));
+        return userAuthTokenDao.creatAuthToken(userAuthTokenEntity);
+    }
+
 }
