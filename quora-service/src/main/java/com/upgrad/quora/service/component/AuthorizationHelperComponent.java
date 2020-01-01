@@ -13,9 +13,9 @@ public class AuthorizationHelperComponent {
     public boolean isValidUserAuthTokenEntity(UserAuthTokenEntity userAuthTokenEntity) {
         boolean isValid = false;
         final ZonedDateTime curretTime = ZonedDateTime.now();
-        if ( userAuthTokenEntity != null &&
+        if (userAuthTokenEntity != null &&
                 userAuthTokenEntity.getLogoutAt() == null &&
-                userAuthTokenEntity.getExpiresAt().isAfter(curretTime)){
+                userAuthTokenEntity.getExpiresAt().isAfter(curretTime)) {
             isValid = true;
         }
         return isValid;

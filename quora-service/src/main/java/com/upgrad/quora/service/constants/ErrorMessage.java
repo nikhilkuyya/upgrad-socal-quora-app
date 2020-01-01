@@ -13,6 +13,7 @@ public enum ErrorMessage {
     DeleteUserNotFoundWithUUID("User with entered uuid to be deleted does not exist");
 
     private String errorMessage;
+
     ErrorMessage(final String errorMessage) {
         this.errorMessage = errorMessage;
     }

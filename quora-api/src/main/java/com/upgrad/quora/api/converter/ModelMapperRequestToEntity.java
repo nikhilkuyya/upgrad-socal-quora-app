@@ -7,7 +7,7 @@ public class ModelMapperRequestToEntity {
 
     public static UserEntity mapSigninUserRequestToUserEntity(SignupUserRequest signinUserRequest) {
         UserEntity userEntity = null;
-        if(signinUserRequest != null){
+        if (signinUserRequest != null) {
             userEntity = new UserEntity();
             userEntity.setFirstname(signinUserRequest.getFirstName());
             userEntity.setLastname(signinUserRequest.getLastName());
@@ -19,7 +19,7 @@ public class ModelMapperRequestToEntity {
             userEntity.setAboutme(signinUserRequest.getAboutMe());
             userEntity.setDob(signinUserRequest.getDob());
         }
-        return  userEntity;
+        return userEntity;
     }
 
 }

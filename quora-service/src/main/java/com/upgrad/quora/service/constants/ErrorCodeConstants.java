@@ -13,7 +13,8 @@ public enum ErrorCodeConstants {
     UserNotFoundWithUUID("USR-001");
 
     private String code;
-    ErrorCodeConstants(final String code){
+
+    ErrorCodeConstants(final String code) {
         this.code = code;
     }
 

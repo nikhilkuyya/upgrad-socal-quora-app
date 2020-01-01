@@ -13,35 +13,35 @@ public class UserDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public UserEntity createUser(UserEntity user){
+    public UserEntity createUser(UserEntity user) {
         entityManager.persist(user);
         return user;
     }
 
-    public UserEntity getUserByUserName(final String userName){
-        try{
+    public UserEntity getUserByUserName(final String userName) {
+        try {
             return entityManager.createNamedQuery("userByUserName", UserEntity.class)
-                    .setParameter("username",userName).getSingleResult();
-        }catch (NoResultException nre){
-            return  null;
+                    .setParameter("username", userName).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
         }
     }
 
-    public UserEntity getUserByEmail(final String email){
-        try{
+    public UserEntity getUserByEmail(final String email) {
+        try {
             return entityManager.createNamedQuery("userByEmailId", UserEntity.class)
-                    .setParameter("email",email).getSingleResult();
-        }catch (NoResultException nre){
-            return  null;
+                    .setParameter("email", email).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
         }
     }
 
-    public UserEntity getUserByUUID(final String uuid){
-        try{
+    public UserEntity getUserByUUID(final String uuid) {
+        try {
             return entityManager.createNamedQuery("userByUUID", UserEntity.class)
-                    .setParameter("uuid",uuid).getSingleResult();
-        }catch (NoResultException nre){
-            return  null;
+                    .setParameter("uuid", uuid).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
         }
     }
 

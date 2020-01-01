@@ -7,7 +7,7 @@ import com.upgrad.quora.service.entity.UserEntity;
 
 public class ModelMapperEntityToResponse {
 
-    public static SignupUserResponse getSignupResponse(final String uuid,final String statusMessage) {
+    public static SignupUserResponse getSignupResponse(final String uuid, final String statusMessage) {
         SignupUserResponse userResponse = null;
         if (uuid != null) {
             userResponse = new SignupUserResponse();
@@ -19,27 +19,27 @@ public class ModelMapperEntityToResponse {
 
     public static UserDetailsResponse getUserDetailsResponse(final UserEntity userEntity) {
         UserDetailsResponse userDetailsResponse = null;
-        if(userEntity != null){
-           userDetailsResponse = new UserDetailsResponse()
-                   .firstName(userEntity.getFirstname())
-                   .lastName(userEntity.getLastname())
-                   .userName(userEntity.getUsername())
-                   .emailAddress(userEntity.getEmail())
-                   .country(userEntity.getCountry())
-                   .aboutMe(userEntity.getAboutme())
-                   .dob(userEntity.getDob())
-                   .contactNumber(userEntity.getContactnumber());
+        if (userEntity != null) {
+            userDetailsResponse = new UserDetailsResponse()
+                    .firstName(userEntity.getFirstname())
+                    .lastName(userEntity.getLastname())
+                    .userName(userEntity.getUsername())
+                    .emailAddress(userEntity.getEmail())
+                    .country(userEntity.getCountry())
+                    .aboutMe(userEntity.getAboutme())
+                    .dob(userEntity.getDob())
+                    .contactNumber(userEntity.getContactnumber());
         }
         return userDetailsResponse;
     }
 
     public static UserDeleteResponse getUserDeleteResponse(final String uuid,
-                                                           final String status){
+                                                           final String status) {
         UserDeleteResponse userDeleteResponse = null;
-        if(uuid != null) {
+        if (uuid != null) {
             userDeleteResponse = new UserDeleteResponse().id(uuid).status(status);
         }
-        return  userDeleteResponse;
+        return userDeleteResponse;
 
     }
 

@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "users")
 @NamedQueries({
-        @NamedQuery(name = "userByUserName",query = "select user from UserEntity user where user.username = :username"),
+        @NamedQuery(name = "userByUserName", query = "select user from UserEntity user where user.username = :username"),
         @NamedQuery(name = "userByEmailId", query = "select user from UserEntity user where user.email = :email"),
         @NamedQuery(name = "userByUUID", query = "select user from UserEntity user where user.uuid = :uuid")
 })
@@ -37,12 +37,12 @@ public class UserEntity {
     @Size(max = 30)
     private String lastname;
 
-    @Column(name = "username",unique = true)
+    @Column(name = "username", unique = true)
     @NotNull
     @Size(max = 30)
     private String username;
 
-    @Column(name = "email",unique = true)
+    @Column(name = "email", unique = true)
     @NotNull
     private String email;
 
@@ -61,7 +61,7 @@ public class UserEntity {
     private String country;
 
     @Column(name = "aboutme")
-    @Size(max =50)
+    @Size(max = 50)
     private String aboutme;
 
     @Column(name = "dob")

@@ -23,12 +23,12 @@ public class CommonController {
     @Autowired
     private AuthorizationHeaderComponent authorizationHeaderComponent;
 
-    @RequestMapping(method = RequestMethod.GET,path = "/userprofile/{userId}",
+    @RequestMapping(method = RequestMethod.GET, path = "/userprofile/{userId}",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<UserDetailsResponse> userProfile(@RequestHeader("authorization") final String bearerToken,
                                                            @PathVariable("userId") final String userUuid) throws AuthorizationFailedException, UserNotFoundException {
         String jwtToken = authorizationHeaderComponent.getBearerToken(bearerToken);
-        UserEntity userEntity = this.commonService.getUserEntity(jwtToken,userUuid);
+        UserEntity userEntity = this.commonService.getUserEntity(jwtToken, userUuid);
         UserDetailsResponse userDetailsResponse = ModelMapperEntityToResponse.getUserDetailsResponse(userEntity);
         return new ResponseEntity<UserDetailsResponse>(userDetailsResponse, HttpStatus.OK);
     }

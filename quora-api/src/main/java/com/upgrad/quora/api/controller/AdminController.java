@@ -24,13 +24,13 @@ public class AdminController {
     @Autowired
     private AuthorizationHeaderComponent authorizationHeaderComponent;
 
-    @RequestMapping(method = RequestMethod.DELETE,path = "/admin/user/{userId}",
+    @RequestMapping(method = RequestMethod.DELETE, path = "/admin/user/{userId}",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<UserDeleteResponse> userDelete(@PathVariable("userId") final String userUuid,
                                                          @RequestHeader("authorization") final String bearerToken)
             throws AuthorizationFailedException, UserNotFoundException {
         String accessToken = authorizationHeaderComponent.getBearerToken(bearerToken);
-        UserEntity userEntity = adminService.deleteUser(accessToken,userUuid);
+        UserEntity userEntity = adminService.deleteUser(accessToken, userUuid);
         UserDeleteResponse userDeleteResponse = ModelMapperEntityToResponse.getUserDeleteResponse(
                 userEntity.getUuid(),
                 ResponseMessages.USERDELETESUCCESS.getResponseMessage());

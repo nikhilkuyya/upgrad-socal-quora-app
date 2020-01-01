@@ -21,8 +21,8 @@ public class CommonService {
     public UserEntity getUserEntity(final String accessToken,
                                     final String userUuid) throws UserNotFoundException, AuthorizationFailedException {
 
-        UserEntity userEntity = authorizationService.validateTokenandFetchUserByUUID(accessToken,userUuid);
-        if(userEntity == null) {
+        UserEntity userEntity = authorizationService.validateTokenandFetchUserByUUID(accessToken, userUuid);
+        if (userEntity == null) {
             throw new UserNotFoundException(ErrorCodeConstants.UserNotFoundWithUUID.getCode(),
                     ErrorMessage.UserNotFoundWithUUID.getErrorMessage());
         }

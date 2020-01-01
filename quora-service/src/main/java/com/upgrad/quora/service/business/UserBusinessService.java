@@ -47,29 +47,29 @@ public class UserBusinessService {
         if (usersBySameUserName != null) {
             throw new SignUpRestrictedException(ErrorCodeConstants.UserNameAlreadyExist.getCode(),
                     ErrorMessage.UserNameAlreadyExist.getErrorMessage());
-        }else if (userBySameEmail != null) {
-            throw new SignUpRestrictedException(ErrorCodeConstants.UserEmailAlreadyExist.getCode(),ErrorMessage.UserEmailIdAlreadyExist.getErrorMessage());
+        } else if (userBySameEmail != null) {
+            throw new SignUpRestrictedException(ErrorCodeConstants.UserEmailAlreadyExist.getCode(), ErrorMessage.UserEmailIdAlreadyExist.getErrorMessage());
         }
 
-         String[] encrytionData =  passwordCryptoGraphyProvider.encrypt(userEntity.getPassword());
-         userEntity.setSalt(encrytionData[0]);
-         userEntity.setPassword(encrytionData[1]);
-         return userDao.createUser(userEntity);
+        String[] encrytionData = passwordCryptoGraphyProvider.encrypt(userEntity.getPassword());
+        userEntity.setSalt(encrytionData[0]);
+        userEntity.setPassword(encrytionData[1]);
+        return userDao.createUser(userEntity);
     }
 
     @Transactional
     public UserAuthTokenEntity signin(final String username,
                                       final String password) throws AuthenticationFailedException {
-        UserEntity userEntity =  userDao.getUserByUserName(username);
-        if(userEntity == null) {
-            throw  new AuthenticationFailedException(ErrorCodeConstants.UserNameNotValidInput.getCode(),
+        UserEntity userEntity = userDao.getUserByUserName(username);
+        if (userEntity == null) {
+            throw new AuthenticationFailedException(ErrorCodeConstants.UserNameNotValidInput.getCode(),
                     ErrorMessage.UserNameDoesnotExist.getErrorMessage());
         }
 
         final String salt = userEntity.getSalt();
-        final String encryptedInputPassword = PasswordCryptographyProvider.encrypt(password,salt);
+        final String encryptedInputPassword = PasswordCryptographyProvider.encrypt(password, salt);
         final String actualPassword = userEntity.getPassword();
-        if(!actualPassword.equals(encryptedInputPassword)){
+        if (!actualPassword.equals(encryptedInputPassword)) {
             throw new AuthenticationFailedException(ErrorCodeConstants.PasswordInvalidInput.getCode(),
                     ErrorMessage.PasswordInvalidInput.getErrorMessage());
         }
@@ -82,7 +82,7 @@ public class UserBusinessService {
         userAuthTokenEntity.setUser(userEntity);
         userAuthTokenEntity.setLoginAt(currentTime);
         userAuthTokenEntity.setExpiresAt(expiresAt);
-        userAuthTokenEntity.setAccessToken(jwtTokenProvider.generateToken(userEntity.getUuid(),currentTime,expiresAt));
+        userAuthTokenEntity.setAccessToken(jwtTokenProvider.generateToken(userEntity.getUuid(), currentTime, expiresAt));
         return userAuthTokenDao.creatAuthToken(userAuthTokenEntity);
     }
 

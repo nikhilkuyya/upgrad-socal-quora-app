@@ -21,19 +21,18 @@ public class UserAuthTokenDao {
 
     public UserAuthTokenEntity getUserAuthToken(String jwtToken) {
         try {
-            return entityManager.createNamedQuery("userAuthTokenByAccessToken",UserAuthTokenEntity.class)
-                    .setParameter("accessToken",jwtToken).getSingleResult();
-        }catch (NoResultException nre) {
-            return  null;
+            return entityManager.createNamedQuery("userAuthTokenByAccessToken", UserAuthTokenEntity.class)
+                    .setParameter("accessToken", jwtToken).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
         }
 
     }
 
     public UserAuthTokenEntity update(UserAuthTokenEntity userAuthTokenEntity) {
         entityManager.merge(userAuthTokenEntity);
-        return  userAuthTokenEntity;
+        return userAuthTokenEntity;
     }
-
 
 
 }

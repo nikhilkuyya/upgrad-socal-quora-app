@@ -36,13 +36,13 @@ public class AuthorizationService {
                     ErrorMessage.UserHasNotSignedIn.getErrorMessage());
         }
 
-        if(!authorizationHelperComponent.isValidUserAuthTokenEntity(userAuthTokenEntity)) {
+        if (!authorizationHelperComponent.isValidUserAuthTokenEntity(userAuthTokenEntity)) {
             throw new AuthorizationFailedException(ErrorCodeConstants.UserHasSignedOut.getCode(),
                     ErrorMessage.UserHasSignedOut.getErrorMessage());
         }
 
         UserEntity userEntity = userDao.getUserByUUID(userUuid);
-        return  userEntity;
+        return userEntity;
     }
 
 }

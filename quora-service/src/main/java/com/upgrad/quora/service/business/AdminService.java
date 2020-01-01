@@ -26,9 +26,9 @@ public class AdminService {
     private AuthorizationService authorizationService;
 
     @Transactional
-    public UserEntity deleteUser(final String bearerToken,final String uuId)
-        throws AuthorizationFailedException,UserNotFoundException {
-        UserEntity userEntity = authorizationService.validateTokenandFetchUserByUUID(bearerToken,uuId);
+    public UserEntity deleteUser(final String bearerToken, final String uuId)
+            throws AuthorizationFailedException, UserNotFoundException {
+        UserEntity userEntity = authorizationService.validateTokenandFetchUserByUUID(bearerToken, uuId);
 
         if (userEntity == null) {
             throw new UserNotFoundException(ErrorCodeConstants.UserNotFoundWithUUID.getCode(),
@@ -39,7 +39,7 @@ public class AdminService {
         String jwtUser = jwtUserAudience.get(0);
         UserEntity loginUserProxy = userDao.getUserByUUID(jwtUser);
         UserEntity loggedUserEntity = HibernateHelperService.initializeAndUnproxy(loginUserProxy);
-        if(!loggedUserEntity.getRole().equals(Role.Admin.getValue())) {
+        if (!loggedUserEntity.getRole().equals(Role.Admin.getValue())) {
             throw new AuthorizationFailedException(ErrorCodeConstants.USERDELTEACTIONUNAUTHORIZED.getCode(),
                     ErrorMessage.USERDELTEACTIONUNAUTHORIZED.getErrorMessage());
         }
