@@ -59,7 +59,7 @@ public class UserController {
         final String[] userDetails = authorizationHelperService.getUserDetailsFromBearToken(encodedToken);
         UserAuthTokenEntity userAuthTokenEntity = userService.signin(userDetails[0],userDetails[1]);
         SigninResponse signinResponse = new SigninResponse()
-                .id(userAuthTokenEntity.getUuid())
+                .id(userAuthTokenEntity.getUser().getUuid())
                 .message(ResponseMessages.USERSIGNINSUCCESS.getResponseMessage());
         HttpHeaders headers = new HttpHeaders();
         headers.add("access-token",userAuthTokenEntity.getAccessToken());

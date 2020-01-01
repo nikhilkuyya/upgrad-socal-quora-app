@@ -1,6 +1,7 @@
 package com.upgrad.quora.api.converter;
 
 import com.upgrad.quora.api.model.SignupUserResponse;
+import com.upgrad.quora.api.model.UserDeleteResponse;
 import com.upgrad.quora.api.model.UserDetailsResponse;
 import com.upgrad.quora.service.entity.UserEntity;
 
@@ -30,6 +31,16 @@ public class ModelMapperEntityToResponse {
                    .contactNumber(userEntity.getContactnumber());
         }
         return userDetailsResponse;
+    }
+
+    public static UserDeleteResponse getUserDeleteResponse(final String uuid,
+                                                           final String status){
+        UserDeleteResponse userDeleteResponse = null;
+        if(uuid != null) {
+            userDeleteResponse = new UserDeleteResponse().id(uuid).status(status);
+        }
+        return  userDeleteResponse;
+
     }
 
 }

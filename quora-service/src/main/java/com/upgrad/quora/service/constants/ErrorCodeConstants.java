@@ -3,12 +3,13 @@ package com.upgrad.quora.service.constants;
 public enum ErrorCodeConstants {
 
     UserNameAlreadyExist("SGR-001"),
+    AccessTokenInvalid("SGR-001"),
     UserEmailAlreadyExist("SGR-002"),
     UserNameNotValidInput("ATH-001"),
     PasswordInvalidInput("ATH-002"),
-    AccessTokenInvalid("SGR-001"),
     UserHasNotSignedIn("ATHR-001"),
     UserHasSignedOut("ATHR-002"),
+    USERDELTEACTIONUNAUTHORIZED("ATHR-003"),
     UserNotFoundWithUUID("USR-001");
 
     private String code;

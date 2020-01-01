@@ -8,7 +8,9 @@ public enum ErrorMessage {
     AccessTokenInvalid("User is not Signed in"),
     UserHasNotSignedIn("User has not signed in"),
     UserHasSignedOut("User is signed out.Sign in first to get user details"),
-    UserNotFoundWithUUID("User with entered uuid does not exist");
+    UserNotFoundWithUUID("User with entered uuid does not exist"),
+    USERDELTEACTIONUNAUTHORIZED("Unauthorized Access, Entered user is not an admin"),
+    DeleteUserNotFoundWithUUID("User with entered uuid to be deleted does not exist");
 
     private String errorMessage;
     ErrorMessage(final String errorMessage) {
