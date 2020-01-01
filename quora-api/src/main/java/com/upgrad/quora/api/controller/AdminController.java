@@ -35,6 +35,6 @@ public class AdminController {
                 userEntity.getUuid(),
                 ResponseMessages.USERDELETESUCCESS.getResponseMessage());
         return new ResponseEntity<UserDeleteResponse>(userDeleteResponse,
-                HttpStatus.NO_CONTENT);
+                HttpStatus.OK);
     }
 }
