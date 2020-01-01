@@ -6,7 +6,10 @@ public enum ErrorCodeConstants {
     UserEmailAlreadyExist("SGR-002"),
     UserNameNotValidInput("ATH-001"),
     PasswordInvalidInput("ATH-002"),
-    AccessTokenInvalid("SGR-001");
+    AccessTokenInvalid("SGR-001"),
+    UserHasNotSignedIn("ATHR-001"),
+    UserHasSignedOut("ATHR-002"),
+    UserNotFoundWithUUID("USR-001");
 
     private String code;
     ErrorCodeConstants(final String code){

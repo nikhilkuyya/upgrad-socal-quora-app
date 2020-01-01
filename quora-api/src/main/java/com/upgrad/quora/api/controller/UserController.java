@@ -1,13 +1,13 @@
 package com.upgrad.quora.api.controller;
 
 import com.upgrad.quora.api.constants.ResponseMessages;
-import com.upgrad.quora.api.constants.TokenPrefixes;
 import com.upgrad.quora.api.converter.ModelMapperEntityToResponse;
 import com.upgrad.quora.api.converter.ModelMapperRequestToEntity;
 import com.upgrad.quora.api.model.SigninResponse;
 import com.upgrad.quora.api.model.SignoutResponse;
 import com.upgrad.quora.api.model.SignupUserRequest;
 import com.upgrad.quora.api.model.SignupUserResponse;
+import com.upgrad.quora.service.business.AuthorizationHelperService;
 import com.upgrad.quora.service.business.UserBusinessService;
 import com.upgrad.quora.service.entity.UserAuthTokenEntity;
 import com.upgrad.quora.service.entity.UserEntity;
@@ -22,7 +22,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Base64;
 import java.util.UUID;
 
 
@@ -32,6 +31,9 @@ public class UserController {
 
     @Autowired
     private UserBusinessService userService;
+
+    @Autowired
+    private AuthorizationHelperService authorizationHelperService;
 
 
     @RequestMapping(method = RequestMethod.POST, path = "/user/signup",
@@ -53,9 +55,8 @@ public class UserController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SigninResponse> signin(@RequestHeader("authorization") final String basicToken)
             throws AuthenticationFailedException {
-        final String encodedToken = basicToken.split(TokenPrefixes.BasicToken.getTokenPrefix())[1];
-        final byte[] decodeTokenBytes =  Base64.getDecoder().decode(encodedToken);
-        final String[] userDetails = new String(decodeTokenBytes).split(":");
+        final String encodedToken = authorizationHelperService.getBasicToken(basicToken);
+        final String[] userDetails = authorizationHelperService.getUserDetailsFromBearToken(encodedToken);
         UserAuthTokenEntity userAuthTokenEntity = userService.signin(userDetails[0],userDetails[1]);
         SigninResponse signinResponse = new SigninResponse()
                 .id(userAuthTokenEntity.getUuid())
@@ -69,7 +70,7 @@ public class UserController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SignoutResponse> signout(@RequestHeader("authorization") final  String bearerToken)
             throws SignOutRestrictedException {
-        final String jwtToken = bearerToken.split(TokenPrefixes.BearerToken.getTokenPrefix())[1];
+        final String jwtToken = authorizationHelperService.getBearerToken(bearerToken);
         UserAuthTokenEntity userAuthTokenEntity = userService.signout(jwtToken);
         SignoutResponse signoutResponse = new SignoutResponse()
                 .id(userAuthTokenEntity.getUuid())

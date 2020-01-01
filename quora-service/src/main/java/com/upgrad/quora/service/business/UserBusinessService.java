@@ -28,6 +28,9 @@ public class UserBusinessService {
     private UserAuthTokenDao userAuthTokenDao;
 
     @Autowired
+    private AuthorizationHelperService authorizationHelperService;
+
+    @Autowired
     private PasswordCryptographyProvider passwordCryptoGraphyProvider;
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -81,15 +84,15 @@ public class UserBusinessService {
 
     @Transactional
     public UserAuthTokenEntity signout(final String jwtToken) throws SignOutRestrictedException {
-        UserAuthTokenEntity userAuthTokenEntity = this.userAuthTokenDao.getUserAuthToken(jwtToken);
-        ZonedDateTime curretTime = ZonedDateTime.now();
-        if ( userAuthTokenEntity == null ||
-                userAuthTokenEntity.getLogoutAt() != null ||
-                userAuthTokenEntity.getExpiresAt().isBefore(curretTime)) {
-            throw new SignOutRestrictedException(ErrorCodeConstants.AccessTokenInvalid.getCode(),
+        UserAuthTokenEntity userAuthTokenEntity = this.authorizationHelperService.getUserAuthTokenEntity(jwtToken);
+
+        if (!this.authorizationHelperService.isValidUserAuthTokenEntity(userAuthTokenEntity)) {
+            throw new SignOutRestrictedException(
+                    ErrorCodeConstants.AccessTokenInvalid.getCode(),
                     ErrorMessage.AccessTokenInvalid.getErrorMessage());
         }
 
+        final ZonedDateTime curretTime = ZonedDateTime.now();
         userAuthTokenEntity.setLogoutAt(curretTime);
         return userAuthTokenDao.update(userAuthTokenEntity);
     }

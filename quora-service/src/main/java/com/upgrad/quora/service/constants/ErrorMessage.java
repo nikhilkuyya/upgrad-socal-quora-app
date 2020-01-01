@@ -5,7 +5,10 @@ public enum ErrorMessage {
     UserEmailIdAlreadyExist("This user has already been registered, try with any other emailId"),
     UserNameDoesnotExist("This username does not exist"),
     PasswordInvalidInput("Password failed"),
-    AccessTokenInvalid("User is not Signed in");
+    AccessTokenInvalid("User is not Signed in"),
+    UserHasNotSignedIn("User has not signed in"),
+    UserHasSignedOut("User is signed out.Sign in first to get user details"),
+    UserNotFoundWithUUID("User with entered uuid does not exist");
 
     private String errorMessage;
     ErrorMessage(final String errorMessage) {

@@ -8,7 +8,8 @@ import javax.validation.constraints.Size;
 @Table(name = "users")
 @NamedQueries({
         @NamedQuery(name = "userByUserName",query = "select user from UserEntity user where user.username = :username"),
-        @NamedQuery(name = "userByEmailId", query = "select user from UserEntity user where user.email = :email")
+        @NamedQuery(name = "userByEmailId", query = "select user from UserEntity user where user.email = :email"),
+        @NamedQuery(name = "userByUUID", query = "select user from UserEntity user where user.uuid = :uuid")
 })
 public class UserEntity {
 
