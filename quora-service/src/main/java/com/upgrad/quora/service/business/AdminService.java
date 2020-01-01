@@ -36,12 +36,15 @@ public class AdminService {
         DecodedJWT decodedJWT = JWT.decode(bearerToken);
         List<String> jwtUserAudience = decodedJWT.getAudience();
         String jwtUser = jwtUserAudience.get(0);
-        UserEntity loggedInUser = userDao.getUserByUUID(jwtUser);
-        if(loggedInUser.getRole() != Role.Admin.getValue()) {
+        UserEntity loginUserProxy = userDao.getUserByUUID(jwtUser);
+        UserEntity loggedUserEntity = HibernateHelperService.initializeAndUnproxy(loginUserProxy);
+        if(!loggedUserEntity.getRole().equals(Role.Admin.getValue())) {
             throw new AuthorizationFailedException(ErrorCodeConstants.USERDELTEACTIONUNAUTHORIZED.getCode(),
                     ErrorMessage.USERDELTEACTIONUNAUTHORIZED.getErrorMessage());
         }
 
         return userDao.deleteUser(userEntity);
     }
+
+
 }
