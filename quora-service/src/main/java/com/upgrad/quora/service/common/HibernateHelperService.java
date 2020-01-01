@@ -1,4 +1,4 @@
-package com.upgrad.quora.service.business;
+package com.upgrad.quora.service.common;
 
 import org.hibernate.Hibernate;
 import org.hibernate.proxy.HibernateProxy;

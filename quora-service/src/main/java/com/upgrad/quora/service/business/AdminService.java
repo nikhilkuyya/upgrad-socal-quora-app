@@ -2,6 +2,7 @@ package com.upgrad.quora.service.business;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.upgrad.quora.service.common.HibernateHelperService;
 import com.upgrad.quora.service.constants.ErrorCodeConstants;
 import com.upgrad.quora.service.constants.ErrorMessage;
 import com.upgrad.quora.service.dao.UserDao;
