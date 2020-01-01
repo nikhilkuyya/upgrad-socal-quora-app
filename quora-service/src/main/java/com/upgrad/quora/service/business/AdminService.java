@@ -23,12 +23,12 @@ public class AdminService {
     private UserDao userDao;
 
     @Autowired
-    private AuthorizationHelperService authorizationHelperService;
+    private AuthorizationService authorizationService;
 
     @Transactional
     public UserEntity deleteUser(final String bearerToken,final String uuId)
         throws AuthorizationFailedException,UserNotFoundException {
-        UserEntity userEntity = authorizationHelperService.validateTokenandFetchUserByUUID(bearerToken,uuId);
+        UserEntity userEntity = authorizationService.validateTokenandFetchUserByUUID(bearerToken,uuId);
 
         if (userEntity == null) {
             throw new UserNotFoundException(ErrorCodeConstants.UserNotFoundWithUUID.getCode(),

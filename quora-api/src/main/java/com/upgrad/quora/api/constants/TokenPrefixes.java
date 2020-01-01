@@ -1,4 +1,4 @@
-package com.upgrad.quora.service.constants;
+package com.upgrad.quora.api.constants;
 
 public enum TokenPrefixes {
     BearerToken("Bearer "),

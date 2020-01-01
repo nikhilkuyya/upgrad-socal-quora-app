@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class CommonService {
 
     @Autowired
-    private AuthorizationHelperService authorizationHelperService;
+    private AuthorizationService authorizationService;
 
     @Autowired
     private UserDao userDao;
@@ -21,7 +21,7 @@ public class CommonService {
     public UserEntity getUserEntity(final String accessToken,
                                     final String userUuid) throws UserNotFoundException, AuthorizationFailedException {
 
-        UserEntity userEntity = authorizationHelperService.validateTokenandFetchUserByUUID(accessToken,userUuid);
+        UserEntity userEntity = authorizationService.validateTokenandFetchUserByUUID(accessToken,userUuid);
         if(userEntity == null) {
             throw new UserNotFoundException(ErrorCodeConstants.UserNotFoundWithUUID.getCode(),
                     ErrorMessage.UserNotFoundWithUUID.getErrorMessage());

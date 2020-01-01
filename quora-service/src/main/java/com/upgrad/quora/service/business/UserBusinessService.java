@@ -1,5 +1,7 @@
 package com.upgrad.quora.service.business;
 
+import com.upgrad.quora.service.component.AuthorizationHelperComponent;
+import com.upgrad.quora.service.component.PasswordCryptographyProvider;
 import com.upgrad.quora.service.constants.ErrorCodeConstants;
 import com.upgrad.quora.service.constants.ErrorMessage;
 import com.upgrad.quora.service.dao.UserAuthTokenDao;
@@ -28,7 +30,10 @@ public class UserBusinessService {
     private UserAuthTokenDao userAuthTokenDao;
 
     @Autowired
-    private AuthorizationHelperService authorizationHelperService;
+    private AuthorizationService authorizationService;
+
+    @Autowired
+    private AuthorizationHelperComponent authorizationHelperComponent;
 
     @Autowired
     private PasswordCryptographyProvider passwordCryptoGraphyProvider;
@@ -84,9 +89,9 @@ public class UserBusinessService {
 
     @Transactional
     public UserAuthTokenEntity signout(final String jwtToken) throws SignOutRestrictedException {
-        UserAuthTokenEntity userAuthTokenEntity = this.authorizationHelperService.getUserAuthTokenEntity(jwtToken);
+        UserAuthTokenEntity userAuthTokenEntity = this.authorizationService.getUserAuthTokenEntity(jwtToken);
 
-        if (!this.authorizationHelperService.isValidUserAuthTokenEntity(userAuthTokenEntity)) {
+        if (!this.authorizationHelperComponent.isValidUserAuthTokenEntity(userAuthTokenEntity)) {
             throw new SignOutRestrictedException(
                     ErrorCodeConstants.AccessTokenInvalid.getCode(),
                     ErrorMessage.AccessTokenInvalid.getErrorMessage());
