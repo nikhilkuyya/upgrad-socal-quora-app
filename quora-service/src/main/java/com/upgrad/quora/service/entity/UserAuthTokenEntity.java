@@ -10,16 +10,17 @@ public class UserAuthTokenEntity {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "uuid")
     @NotNull
     private String uuid;
 
-    @ManyToOne(fetch = FetchType.EAGER,targetEntity = UserEntity.class)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @NotNull
-    private int userId;
+    private UserEntity user;
 
     @Column(name = "access_token")
     @NotNull
@@ -52,12 +53,12 @@ public class UserAuthTokenEntity {
         this.uuid = uuid;
     }
 
-    public int getUserId() {
-        return userId;
+    public UserEntity getUser() {
+        return user;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 
     public String getAccessToken() {
