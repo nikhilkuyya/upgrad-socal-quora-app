@@ -4,7 +4,8 @@ public enum ErrorMessage {
     UserNameAlreadyExist("Try any other Username, this Username has already been taken"),
     UserEmailIdAlreadyExist("This user has already been registered, try with any other emailId"),
     UserNameDoesnotExist("This username does not exist"),
-    PasswordInvalidInput("Password failed");
+    PasswordInvalidInput("Password failed"),
+    AccessTokenInvalid("User is not Signed in");
 
     private String errorMessage;
     ErrorMessage(final String errorMessage) {

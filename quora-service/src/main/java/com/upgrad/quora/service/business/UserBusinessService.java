@@ -7,6 +7,7 @@ import com.upgrad.quora.service.dao.UserDao;
 import com.upgrad.quora.service.entity.UserAuthTokenEntity;
 import com.upgrad.quora.service.entity.UserEntity;
 import com.upgrad.quora.service.exception.AuthenticationFailedException;
+import com.upgrad.quora.service.exception.SignOutRestrictedException;
 import com.upgrad.quora.service.exception.SignUpRestrictedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -77,4 +78,19 @@ public class UserBusinessService {
         return userAuthTokenDao.creatAuthToken(userAuthTokenEntity);
     }
 
+
+    @Transactional
+    public UserAuthTokenEntity signout(final String jwtToken) throws SignOutRestrictedException {
+        UserAuthTokenEntity userAuthTokenEntity = this.userAuthTokenDao.getUserAuthToken(jwtToken);
+        ZonedDateTime curretTime = ZonedDateTime.now();
+        if ( userAuthTokenEntity == null ||
+                userAuthTokenEntity.getLogoutAt() != null ||
+                userAuthTokenEntity.getExpiresAt().isBefore(curretTime)) {
+            throw new SignOutRestrictedException(ErrorCodeConstants.AccessTokenInvalid.getCode(),
+                    ErrorMessage.AccessTokenInvalid.getErrorMessage());
+        }
+
+        userAuthTokenEntity.setLogoutAt(curretTime);
+        return userAuthTokenDao.update(userAuthTokenEntity);
+    }
 }
