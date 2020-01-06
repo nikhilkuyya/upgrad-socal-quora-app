@@ -1,15 +1,9 @@
 package com.upgrad.quora.service.business;
 
-import com.upgrad.quora.service.component.AuthorizationHelperComponent;
-import com.upgrad.quora.service.component.PasswordCryptographyProvider;
-import com.upgrad.quora.service.constants.ErrorCodeConstants;
-import com.upgrad.quora.service.constants.ErrorMessage;
-import com.upgrad.quora.service.dao.UserAuthTokenDao;
 import com.upgrad.quora.service.dao.UserDao;
 import com.upgrad.quora.service.entity.UserAuthTokenEntity;
 import com.upgrad.quora.service.entity.UserEntity;
-import com.upgrad.quora.service.exception.AuthenticationFailedException;
-import com.upgrad.quora.service.exception.SignOutRestrictedException;
+import com.upgrad.quora.service.exception.AuthorizationFailedException;
 import com.upgrad.quora.service.exception.SignUpRestrictedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,88 +11,71 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
-import java.util.UUID;
+import java.util.Objects;
 
-
+/** comments by Archana **/
+ //The class UserBusinessService will define all the business logic required to implement user related functionalities
 @Service
 public class UserBusinessService {
 
     @Autowired
-    private UserDao userDao;
+    UserDao userDao;
 
     @Autowired
-    private UserAuthTokenDao userAuthTokenDao;
+    PasswordCryptographyProvider cryptographyProvider;
 
-    @Autowired
-    private AuthorizationService authorizationService;
-
-    @Autowired
-    private AuthorizationHelperComponent authorizationHelperComponent;
-
-    @Autowired
-    private PasswordCryptographyProvider passwordCryptoGraphyProvider;
+    //The signUp method for registering a new user checks for two conditions
+    //userName already exists and email already exists. If the attributes found to be existed in the database, then the user is intimated that
+    //with the corresponding error message and results in nonRegistration of the user
+    //This method also encrypts the password upon the successfull registration of the user
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public UserEntity signup(UserEntity userEntity) throws SignUpRestrictedException {
+    public UserEntity signUp(final UserEntity userEntity) throws SignUpRestrictedException, NullPointerException {
 
-        UserEntity usersBySameUserName = userDao.getUserByUserName(userEntity.getUsername());
-        UserEntity userBySameEmail = userDao.getUserByEmail(userEntity.getEmail());
+        String userName = userEntity.getUserName();
+        UserEntity userNameExists = userDao.getUserByUserName(userName);
+        String email = userEntity.getEmail();
+        UserEntity emailExits = userDao.getUserByEmail(email);
+        String password = userEntity.getPassword();
 
-        if (usersBySameUserName != null) {
-            throw new SignUpRestrictedException(ErrorCodeConstants.UserNameAlreadyExist.getCode(),
-                    ErrorMessage.UserNameAlreadyExist.getErrorMessage());
-        } else if (userBySameEmail != null) {
-            throw new SignUpRestrictedException(ErrorCodeConstants.UserEmailAlreadyExist.getCode(), ErrorMessage.UserEmailIdAlreadyExist.getErrorMessage());
+       if (userNameExists!=null) {
+            throw new SignUpRestrictedException("SGR-001", "Try any other Username, this Username has already been taken");
+        } else if (emailExits!=null) {
+            throw new SignUpRestrictedException("SGR-002", "This user has already been registered, try with any other emailId");
+        }
+            String[] encryptedText = cryptographyProvider.encrypt(password);
+            userEntity.setSalt(encryptedText[0]);
+            userEntity.setPassword(encryptedText[1]);
+            return userDao.createUser(userEntity);
         }
 
-        String[] encrytionData = passwordCryptoGraphyProvider.encrypt(userEntity.getPassword());
-        userEntity.setSalt(encrytionData[0]);
-        userEntity.setPassword(encrytionData[1]);
-        return userDao.createUser(userEntity);
-    }
+        //Comments by Avia
+        //The below method checks if the user was signed in and if the token is expired
 
-    @Transactional
-    public UserAuthTokenEntity signin(final String username,
-                                      final String password) throws AuthenticationFailedException {
-        UserEntity userEntity = userDao.getUserByUserName(username);
-        if (userEntity == null) {
-            throw new AuthenticationFailedException(ErrorCodeConstants.UserNameNotValidInput.getCode(),
-                    ErrorMessage.UserNameDoesnotExist.getErrorMessage());
+    public UserEntity getUser(final String userUuid,final String authorizationToken) throws AuthorizationFailedException {
+        UserAuthTokenEntity userAuthTokenEntity = userDao.getUserAuthToken(authorizationToken);
+        if(userAuthTokenEntity == null){
+            throw new AuthorizationFailedException("ATHR-001","User has not signed in");
         }
 
-        final String salt = userEntity.getSalt();
-        final String encryptedInputPassword = PasswordCryptographyProvider.encrypt(password, salt);
-        final String actualPassword = userEntity.getPassword();
-        if (!actualPassword.equals(encryptedInputPassword)) {
-            throw new AuthenticationFailedException(ErrorCodeConstants.PasswordInvalidInput.getCode(),
-                    ErrorMessage.PasswordInvalidInput.getErrorMessage());
+        else {
+            ZonedDateTime expiry = userAuthTokenEntity.getExpiresAt();
+            ZonedDateTime now = ZonedDateTime.now();
+            Boolean isExpired = now.isAfter(expiry);
+            if(isExpired){
+                throw new AuthorizationFailedException("ATHR-002","User is signed out.Sign in first to get user details");
+            }
+            else{
+                UserEntity userEntity =  userDao.getUserByID(userUuid);
+                return userEntity;
+            }
         }
 
-        JwtTokenProvider jwtTokenProvider = new JwtTokenProvider(encryptedInputPassword);
-        ZonedDateTime currentTime = ZonedDateTime.now();
-        ZonedDateTime expiresAt = currentTime.plusHours(8);
-        UserAuthTokenEntity userAuthTokenEntity = new UserAuthTokenEntity();
-        userAuthTokenEntity.setUuid(UUID.randomUUID().toString());
-        userAuthTokenEntity.setUser(userEntity);
-        userAuthTokenEntity.setLoginAt(currentTime);
-        userAuthTokenEntity.setExpiresAt(expiresAt);
-        userAuthTokenEntity.setAccessToken(jwtTokenProvider.generateToken(userEntity.getUuid(), currentTime, expiresAt));
-        return userAuthTokenDao.creatAuthToken(userAuthTokenEntity);
-    }
-
-
-    @Transactional
-    public UserAuthTokenEntity signout(final String jwtToken) throws SignOutRestrictedException {
-        UserAuthTokenEntity userAuthTokenEntity = this.authorizationService.getUserAuthTokenEntity(jwtToken);
-
-        if (!this.authorizationHelperComponent.isValidUserAuthTokenEntity(userAuthTokenEntity)) {
-            throw new SignOutRestrictedException(
-                    ErrorCodeConstants.AccessTokenInvalid.getCode(),
-                    ErrorMessage.AccessTokenInvalid.getErrorMessage());
-        }
-
-        final ZonedDateTime curretTime = ZonedDateTime.now();
-        userAuthTokenEntity.setLogoutAt(curretTime);
-        return userAuthTokenDao.update(userAuthTokenEntity);
     }
 }
+
+
+
+
+
+
