@@ -1,86 +1,113 @@
 package com.upgrad.quora.service.entity;
-
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
+
+/** comments by Archana **/
+//The object of this class maps with database table "users"
+//Following is the "users" table schema from, quora.sql
+/*
+        id SERIAL
+        uuid VARCHAR(200) NOT NULL
+        firstName VARCHAR(30) NOT NULL
+        lastName VARCHAR(30) NOT NULL
+        userName VARCHAR(30) UNIQUE NOT NULL
+        email VARCHAR(50) UNIQUE NOT NULL
+        password VARCHAR(255) NOT NULL
+        salt VARCHAR(200) NOT NULL
+        country VARCHAR(30)
+        aboutMe VARCHAR(50)
+        dob VARCHAR(30)
+        role VARCHAR(30)
+        contactNumber VARCHAR(30)
+        PRIMARY KEY (id)
+ */
+
+
 
 @Entity
-@Table(name = "users")
-@NamedQueries({
-        @NamedQuery(name = "userByUserName", query = "select user from UserEntity user where user.username = :username"),
-        @NamedQuery(name = "userByEmailId", query = "select user from UserEntity user where user.email = :email"),
-        @NamedQuery(name = "userByUUID", query = "select user from UserEntity user where user.uuid = :uuid")
-})
-public class UserEntity {
+//The table to be mapped to the database is defined as users and since there is no schema defined in quora.sql,hence the schema is defined to be public
+@Table(name = "users", schema = "public")
+@NamedQueries(
+        {
+        @NamedQuery(name = "userByEmail", query = "select u from UserEntity u where u.email = :email"),
+        @NamedQuery(name = "userByName", query = "select u from UserEntity u where u.userName = :userName")
+        }
+)
 
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private int id;
+public class UserEntity implements Serializable {
 
-    @Column(name = "uuid")
-    @NotNull
-    @Size(max = 200)
-    private String uuid;
+        @Id
+        @Column(name = "id")
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Integer id;
 
-    @Column(name = "firstname")
-    @NotNull
-    @Size(max = 30)
-    private String firstname;
+        @Column(name = "uuid")
+        @NotNull
+        @Size(max = 200)
+        private String uuid;
 
-    @Column(name = "lastname")
-    @NotNull
-    @Size(max = 30)
-    private String lastname;
+        @Column(name = "firstname")
+        @NotNull
+        @Size(max = 30)
+        private String firstName;
 
-    @Column(name = "username", unique = true)
-    @NotNull
-    @Size(max = 30)
-    private String username;
+        @Column(name = "lastname")
+        @NotNull
+        @Size(max = 30)
+        private String lastName;
 
-    @Column(name = "email", unique = true)
-    @NotNull
-    private String email;
+        @Column(name = "username")
+        @NotNull
+        @Size(max = 200)
+        private String userName;
 
-    @Column(name = "password")
-    @Size(max = 255)
-    @NotNull
-    private String password;
+        @Column(name = "email")
+        @NotNull
+        @Size(max = 50)
+        private String email;
 
-    @Column(name = "salt")
-    @NotNull
-    @Size(max = 200)
-    private String salt;
+        @Column(name = "password")
+        @NotNull
+        @Size(max = 255)
+        private String password;
 
-    @Column(name = "country")
-    @Size(max = 30)
-    private String country;
+        @Column(name = "salt")
+        @NotNull
+        @Size(max = 200)
+        private String salt;
 
-    @Column(name = "aboutme")
-    @Size(max = 50)
-    private String aboutme;
+        @Column(name = "country")
+        @Size(max = 30)
+        private String country;
 
-    @Column(name = "dob")
-    @Size(max = 30)
-    private String dob;
+        @Column(name = "aboutme")
+        @Size(max = 50)
+        private String aboutMe;
 
-    @Column(name = "role")
-    @Size(max = 30)
-    private String role;
+        @Column(name = "dob")
+        @Size(max = 30)
+        private String dob;
 
-    @Column(name = "contactnumber")
-    @Size(max = 30)
-    private String contactnumber;
+        @Column(name = "role")
+        @Size(max = 30)
+        private String role;
 
-    public int getId() {
+        @Column(name = "contactnumber")
+        @Size(max = 30)
+        private String contactNumber;
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -92,28 +119,28 @@ public class UserEntity {
         this.uuid = uuid;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getEmail() {
@@ -148,12 +175,12 @@ public class UserEntity {
         this.country = country;
     }
 
-    public String getAboutme() {
-        return aboutme;
+    public String getAboutMe() {
+        return aboutMe;
     }
 
-    public void setAboutme(String aboutme) {
-        this.aboutme = aboutme;
+    public void setAboutMe(String aboutMe) {
+        this.aboutMe = aboutMe;
     }
 
     public String getDob() {
@@ -172,11 +199,26 @@ public class UserEntity {
         this.role = role;
     }
 
-    public String getContactnumber() {
-        return contactnumber;
+    public String getContactNumber() {
+        return contactNumber;
     }
 
-    public void setContactnumber(String contactnumber) {
-        this.contactnumber = contactnumber;
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return new EqualsBuilder().append(this, obj).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().append(this).hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
     }
 }

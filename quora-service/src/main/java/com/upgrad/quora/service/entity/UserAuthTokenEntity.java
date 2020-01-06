@@ -1,57 +1,81 @@
 package com.upgrad.quora.service.entity;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 
+
+/** comments by Archana **/
+//The object of this class maps with database table "USER_AUTH"
+//Following is the "USER_AUTH" table schema from, quora.sql
+/**
+ ID BIGSERIAL PRIMARY KEY,
+ uuid VARCHAR(200) NOT NULL,
+ USER_ID INTEGER NOT NULL,
+ ACCESS_TOKEN VARCHAR(500) NOT NULL,
+ EXPIRES_AT TIMESTAMP NOT NULL,
+ LOGIN_AT TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ LOGOUT_AT TIMESTAMP NULL
+**/
+
+
 @Entity
-@Table(name = "user_auth")
+@Table(name = "USER_AUTH", schema = "public")
 @NamedQueries({
-        @NamedQuery(name = "userAuthTokenByAccessToken", query = "select userAuthToken from UserAuthTokenEntity userAuthToken where userAuthToken.accessToken = :accessToken")
+        @NamedQuery(name = "userAuthTokenByAccessToken", query = "select ut from UserAuthTokenEntity ut where ut.accessToken = :accessToken ")
 })
-public class UserAuthTokenEntity {
 
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class UserAuthTokenEntity implements Serializable {
 
-    @Column(name = "uuid")
-    @NotNull
-    private String uuid;
+        @Id
+        @Column(name = "ID")
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    @NotNull
-    private UserEntity user;
+        @Column(name = "UUID")
+        @NotNull
+        @Size(max = 200)
+        private String uuid;
 
-    @Column(name = "access_token")
-    @NotNull
-    private String accessToken;
+        @ManyToOne
+        @JoinColumn(name = "USER_ID")
+        private UserEntity user;
 
-    @Column(name = "expires_at")
-    @NotNull
-    private ZonedDateTime expiresAt;
+        @Column(name = "ACCESS_TOKEN")
+        @NotNull
+        @Size(max = 500)
+        private String accessToken;
 
-    @Column(name = "login_at")
-    @NotNull
-    private ZonedDateTime loginAt;
+        @Column(name = "EXPIRES_AT")
+        @NotNull
+        private ZonedDateTime expiresAt;
 
-    @Column(name = "logout_at")
-    private ZonedDateTime logoutAt;
+        @Column(name = "LOGIN_AT")
+        @NotNull
+        private ZonedDateTime loginAt;
 
-    public int getId() {
+        @Column(name = "LOGOUT_AT")
+        private ZonedDateTime logoutAt;
+
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
     public String getUuid() {
         return uuid;
     }
-
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
@@ -95,4 +119,22 @@ public class UserAuthTokenEntity {
     public void setLogoutAt(ZonedDateTime logoutAt) {
         this.logoutAt = logoutAt;
     }
+
+
+    @Override
+        public boolean equals (Object obj){
+        return new EqualsBuilder().append(this, obj).isEquals();
+    }
+
+        @Override
+        public int hashCode () {
+        return new HashCodeBuilder().append(this).hashCode();
+    }
+
+        @Override
+        public String toString () {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+    }
 }
+
+
