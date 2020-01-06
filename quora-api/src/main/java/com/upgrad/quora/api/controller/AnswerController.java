@@ -4,7 +4,9 @@ import com.upgrad.quora.api.model.*;
 import com.upgrad.quora.service.business.AnswerBusinessService;
 import com.upgrad.quora.service.business.QuestionBusinessService;
 import com.upgrad.quora.service.business.UserBusinessService;
+import com.upgrad.quora.service.dao.QuestionDao;
 import com.upgrad.quora.service.entity.AnswerEntity;
+import com.upgrad.quora.service.entity.QuestionEntity;
 import com.upgrad.quora.service.exception.AnswerNotFoundException;
 import com.upgrad.quora.service.exception.AuthorizationFailedException;
 import com.upgrad.quora.service.exception.InvalidQuestionException;
@@ -29,6 +31,9 @@ public class AnswerController {
     @Autowired
     private QuestionBusinessService quesBusinessService;
 
+    @Autowired
+    QuestionDao questionDao;
+
     @RequestMapping(method = RequestMethod.POST , path = "question/{questionId}/answer/create" ,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<AnswerResponse> createAnswer(@RequestHeader("authorization") final String authorization, @PathVariable("questionId") final String questionId, final AnswerRequest answerRequest)
@@ -36,6 +41,7 @@ public class AnswerController {
 
         AnswerEntity answerEntity = new AnswerEntity();
         AnswerEntity createdAnswer;
+        answerEntity.setAnswer(answerRequest.getAnswer());
         try {
             String[] bearerAccessToken = authorization.split("Bearer ");
             createdAnswer = ansBusinessService.createAnswer(answerEntity, bearerAccessToken[1],questionId);
@@ -43,7 +49,7 @@ public class AnswerController {
         catch (ArrayIndexOutOfBoundsException are){
             createdAnswer = ansBusinessService.createAnswer(answerEntity, authorization,questionId);
         }
-        answerEntity.setAnswer(answerRequest.getAnswer());
+
         AnswerResponse answerResponse = new AnswerResponse().id(createdAnswer.getUuid()).
                 status("ANSWER CREATED");
 
@@ -70,13 +76,13 @@ public class AnswerController {
     public ResponseEntity<AnswerEditResponse> editAnswerContent(final AnswerEditRequest answerEditRequest, @PathVariable("answerId") final String answerId,
                                                                 @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, AnswerNotFoundException {
 
-        AnswerEntity updatedAnswer;
-        AnswerEntity answerEntity = ansBusinessService.getAnswerById(answerId);
+        AnswerEntity updatedAnswer = new AnswerEntity();
+        updatedAnswer.setAnswer(answerEditRequest.getContent());
         try {
             String[] accessToken = authorization.split("Bearer ");
-            updatedAnswer = ansBusinessService.updateAnswer(answerEntity,answerId, accessToken[1]);
+            updatedAnswer = ansBusinessService.updateAnswer(updatedAnswer,answerId, accessToken[1]);
         }catch(ArrayIndexOutOfBoundsException are) {
-            updatedAnswer = ansBusinessService.updateAnswer(answerEntity,answerId, authorization);
+            updatedAnswer = ansBusinessService.updateAnswer(updatedAnswer,answerId, authorization);
         }
         AnswerEditResponse answerEditResponse = new AnswerEditResponse().id(updatedAnswer.getUuid()).status("ANSWER EDITED");
         return new ResponseEntity<AnswerEditResponse>(answerEditResponse,HttpStatus.OK);
@@ -86,13 +92,17 @@ public class AnswerController {
     public ResponseEntity<List<AnswerDetailsResponse>> getAllAnswersToQuestion(@PathVariable("questionId") final String questionId, @RequestHeader("authorization") final String authorization)
             throws AuthorizationFailedException, InvalidQuestionException {
 
-//        UserAuthTokenEntity userAuthEntity = userBusinessService.getUser(authorization);
-        QuestionEntity questionEntity = quesBusinessService.validateQuestion(questionId);
+       //UserAuthTokenEntity userAuthEntity = userBusinessService.getUser(authorization);
+        ArrayList<AnswerEntity> andList;
+        ArrayList<AnswerDetailsResponse> list = new ArrayList<>();
+        try{
+            String[] accessToken = authorization.split("Bearer ");
+            andList = (ArrayList) ansBusinessService.getAllAnswers(questionId ,accessToken[1]);
+        } catch (ArrayIndexOutOfBoundsException are) {
+            andList = (ArrayList) ansBusinessService.getAllAnswers(questionId ,authorization);
+        }
 
-
-        ArrayList<AnswerDetailsResponse> list = null;
-        ArrayList<AnswerEntity> andList = (ArrayList) ansBusinessService.getAllAnswers(questionId ,authorization);
-
+           QuestionEntity questionEntity = questionDao.getQuestionByUuid(questionId);
         for(AnswerEntity ans : andList)
         {
             AnswerDetailsResponse detailsResponse = new AnswerDetailsResponse();
