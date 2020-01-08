@@ -25,7 +25,7 @@ public class QuestionController {
     QuestionBusinessService questionBusinessService;
 
 
-    /**Commets by Archana **/
+    /**Comments by Adil **/
     //**createQuestion**//
    //This endpoint is used to create Question in the QuoraApplication. Any user can go and access this endpoint and create a question
     //This endpoint requests for the attributes in QuestionRequest and accessToken in the authorization header
@@ -51,7 +51,7 @@ public class QuestionController {
         return new ResponseEntity<QuestionResponse>(questionResponse, HttpStatus.CREATED);
     }
 
-    /**Commets by Archana **/
+    /**Comments by Adil **/
     //**getAllQuestions**//
     //This endpoint is see all the questions posted in the quora application
     //This endpoint is accessed by any user by just providing the access token as input in the authorization header
@@ -79,7 +79,7 @@ public class QuestionController {
     }
 
 
-    /**Commets by Archana **/
+    /**Comments by Adil **/
     //**deleteQuestion**//
     //The admin or the owner of the Question has a privilege of deleting the question
     //This endpoint requests for the questionUuid to be deleted and the questionowner or admin accesstoken in the authorization header
@@ -97,7 +97,7 @@ public class QuestionController {
         return new ResponseEntity<QuestionDeleteResponse>(authorizedDeletedResponse, HttpStatus.OK);
     }
 
-    /**Comments by Avia **/
+
     //**editQuestionContent**//
     //This method only allows the owner of the question to edit a question
     //To edit a question, this endpoint takes in the questionUuid, access token and the content to be updated from the editRequest.
@@ -116,7 +116,7 @@ public class QuestionController {
             questionEntity.setContent(editRequest.getContent());
             editedQuestion = questionBusinessService.editQuestion(questionEntity,authorization);
         }
-        /**Comments by Avia **/
+
         //In normal cases, updating an entity doesn't change the Uuid, meaning questionUuid==updatedUuid.
         // However, we have implemented this feature in case the system later requires to keep track of the updates, for e.g. by adding a suffix after every update like Uuid-1,-2, etc.
 
@@ -126,7 +126,7 @@ public class QuestionController {
 
     }
 
-    /**Comments by Avia **/
+
     //**getAllQuestionsByUser**//
     //This method returns all the questions posted by user as a list and can be accessed by an user.
 

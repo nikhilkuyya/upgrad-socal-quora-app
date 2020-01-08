@@ -26,7 +26,7 @@ import java.util.Base64;
 import java.util.UUID;
 
 
-/** comments by Archana **/
+/** Adil by Adil **/
 //The RestController annotation  adds both the @Controller and @ResponseBody annotations.
 @RestController
 @RequestMapping("/")
@@ -44,7 +44,7 @@ public class UserController {
     @Autowired
     UserAuthenticationBusinessService userAuthenticationBusinessService;
     private String[] bearerAccessToken;
-    /** comments by Archana **/
+    /** Adil by Adil **/
     //**userSignup**//
     @RequestMapping(method = RequestMethod.POST, path = "/user/signup", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SignupUserResponse> userSignup(final SignupUserRequest signupUserRequest) throws SignUpRestrictedException {
@@ -73,12 +73,12 @@ public class UserController {
         return new ResponseEntity<SignupUserResponse>(userResponse, HttpStatus.CREATED);
     }
 
-    /** comments by Archana **/
+    /** Adil by Adil **/
     //**userSignin**//
     //This method defines the user can login to application after the successfull registration
     //This endpoint requests for the User credentials to be passed in the authorization field of header as part of Basic authentication.
     //username:password of the String is encoded to Base64 format in the authorization header
-    //For example, a username of ‘ArchanaA’ and a password of ‘12345’ becomes the string ‘ArchanaA:12345’
+    //For example, a username of ‘AdilA’ and a password of ‘12345’ becomes the string ‘AdilA:12345’
     // and then this string is encoded to Base64 format to ‘QXJjaGFuYUE6MTIzNDU=’
     //Since this is basic authentication the format of authorization header is Basic QXJjaGFuYUE6MTIzNDU=
 
@@ -105,7 +105,7 @@ public class UserController {
         return new ResponseEntity<SigninResponse>(authenticatedSigninResponse, headers, HttpStatus.OK);
     }
 
-    /** comments by Archana **/
+    /** Adil by Adil **/
     //**userSignout**//
     //This endpoint requests for the access token in the authorisation header as a part of Bearer authentication
     @RequestMapping(method = RequestMethod.POST, path = "/user/signout", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

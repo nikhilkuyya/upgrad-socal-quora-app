@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/")
-/**comments by Avia **/
+
 //** userProfile **//
 public class CommonController {
 

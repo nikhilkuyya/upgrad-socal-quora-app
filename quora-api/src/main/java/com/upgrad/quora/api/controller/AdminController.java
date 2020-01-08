@@ -14,7 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/** comments by Archana **/
+/** Adil by Adil **/
 //** deleteUser **//
 @RestController
 @RequestMapping("/")
