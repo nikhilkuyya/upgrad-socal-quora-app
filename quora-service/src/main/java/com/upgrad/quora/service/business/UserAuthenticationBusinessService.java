@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
 
-/** comments by Archana **/
+/** Adil by Adil **/
 //A UserAuthenticationServiceClass for validating the user credentials username and password provided by user during login
 @Service
 public class UserAuthenticationBusinessService {
@@ -24,7 +24,7 @@ public class UserAuthenticationBusinessService {
     @Autowired
     PasswordCryptographyProvider cryptographyProvider;
 
-    /**Commets by Archana **/
+    /**Comments by Adil **/
     //** authenticateToken for signin**//
     //This method authenticates the user by validating the login details username and password against the information stored in
     //the database
@@ -66,7 +66,7 @@ public class UserAuthenticationBusinessService {
     }
 
 
-    /** comments by Archana **/
+    /** Adil by Adil **/
     //**signOut**//
 // This method authorizes the authenticated user for signout endpoint with the securitytoken(accesstoken)
     @Transactional(propagation = Propagation.REQUIRED)

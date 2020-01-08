@@ -30,7 +30,7 @@ public class QuestionBusinessService {
     UserBusinessService userBusinessService;
 
 
-    /** comments by Archana **/
+    /** Adil by Adil **/
     //**postQuestion**//
     //This method receives questionEntity and accessToken as input parameters for creating the question, but before that
     // two checks are done whether a user is signedin or signedout. After successfull validation the question will be persisted
@@ -49,7 +49,7 @@ public class QuestionBusinessService {
         return questionDao.persistQuestion(questionEntity);
     }
 
-    /** comments by Archana **/
+    /** Adil by Adil **/
     //**getAllQuestions**//
     //This method fetches all the questions that are posted in the application, but before that two checks are done
     //whether a user is signedin or signedout. After successfull validation, a user can view all the list of questions
@@ -67,7 +67,7 @@ public class QuestionBusinessService {
 
 
 
-    /** comments by Archana **/
+    /** Adil by Adil **/
     //**deleteQuestion**//
     @Transactional(propagation = Propagation.REQUIRED)
    public String deleteQuestion(final String questionUuid, final String accessToken) throws AuthorizationFailedException, InvalidQuestionException {
@@ -105,7 +105,7 @@ public class QuestionBusinessService {
         return questionUuid;
    }
 
-    /** comments by Avia **/
+    /** Adil by Adil **/
     //This method retrieves the question in the database
     public QuestionEntity getQuestion(final String questionUuid, final String accessToken) throws InvalidQuestionException{
 
@@ -117,7 +117,7 @@ public class QuestionBusinessService {
 
     }
 
-    /** comments by Avia **/
+    /** Adil by Adil **/
     //** editQuestion **//
     //This method updates the question in the database
     //THe method first checks if the user token is valid
@@ -148,7 +148,7 @@ public class QuestionBusinessService {
 
     }
 
-    /** comments by Avia **/
+    /** Adil by Adil **/
     //** getAllQuestionsByUser **//
     //This method updates the question in the database retrieves all the questions post by a user from the database
 

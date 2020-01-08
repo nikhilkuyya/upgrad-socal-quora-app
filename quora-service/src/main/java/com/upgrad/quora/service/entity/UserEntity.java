@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
-/** comments by Archana **/
+/** Adil by Adil **/
 //The object of this class maps with database table "users"
 //Following is the "users" table schema from, quora.sql
 /*
