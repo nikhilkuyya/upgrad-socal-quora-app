@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.time.ZonedDateTime;
 
 
-/** comments by Archana **/
+/** Adil by Adil **/
 //The object of this class maps with database table "USER_AUTH"
 //Following is the "USER_AUTH" table schema from, quora.sql
 /**

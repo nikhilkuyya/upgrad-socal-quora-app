@@ -10,7 +10,7 @@ import javax.persistence.PersistenceContext;
 
 
 
-/** comments by Archana **/
+/** Adil by Adil **/
 @Repository
 public class UserDao {
 
@@ -21,7 +21,7 @@ public class UserDao {
         entityManager.persist(userEntity);
         return userEntity;
     }
-    /** comments by Archana **/
+    /** Adil by Adil **/
     //The method getUserByUserName fetches the user based on userName and if no record is found in the database it returns null
     //This method is called in the UserBusinessService class for the functionality of registering the new user with userName
     // and compared with the existing user having the same userName
@@ -35,7 +35,7 @@ public class UserDao {
         }
     }
 
-    /** comments by Archana **/
+    /** Adil by Adil **/
     //The method getUserByEmail fetches the user based on email and if no record is found in the database it returns null
     //This method is called in the UserBusinessService class for the functionality of registering the new user with email
     // and compared with the existing user having the same email
@@ -49,14 +49,14 @@ public class UserDao {
         }
     }
 
-    /** comments by Archana **/
+    /** Adil by Adil **/
     //This method persists an object of UserAuthTokenEntity to the database
     public UserAuthTokenEntity createAuthToken(final UserAuthTokenEntity userAuthTokenEntity) {
         entityManager.persist(userAuthTokenEntity);
         return userAuthTokenEntity;
     }
 
-    /** comments by Archana **/
+    /** Adil by Adil **/
 // This method retrieves the accesstoken from the database if it exists otherwise returns null
     public UserAuthTokenEntity getUserAuthToken(final String accessToken) {
         try {
@@ -66,7 +66,7 @@ public class UserDao {
         }
     }
 
-    /** comments by Archana **/
+    /** Adil by Adil **/
     //Now the logoutAt attribute is updated  and the UserAuthTokenEntity object is in detached state
     // To persist this attribute in database, the merge method will help in changing the state of object from detached to persistent state
     public void updateUserLogoutAt(final UserAuthTokenEntity updateUserLogoutAt) {
@@ -74,7 +74,7 @@ public class UserDao {
         entityManager.merge(updateUserLogoutAt);
     }
 
-    /** comments by Archana **/
+    /** Adil by Adil **/
     //This method retrieves the user based on user uuid, if found returns user else null
     public UserEntity getUserByUuid(final String uuid) {
         try {
@@ -84,7 +84,7 @@ public class UserDao {
         }
     }
 
-    /** comments by Archana **/
+    /** Adil by Adil **/
    //This method deletes the user record from database
     public void deleteUser(final UserEntity userEntity) {
         entityManager.remove(userEntity);

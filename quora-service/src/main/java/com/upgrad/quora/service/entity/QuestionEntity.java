@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 
-/**Commets by Archana **/
+/**Comments by Adil **/
 
 //The object of this class maps with database table "QUESTION"
 //Following is the "QUESTION" table schema from, quora.sql

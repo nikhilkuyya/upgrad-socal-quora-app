@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
-/** comments by Archana **/
+/** Adil by Adil **/
  //The class UserBusinessService will define all the business logic required to implement user related functionalities
 @Service
 public class UserBusinessService {
@@ -50,7 +50,7 @@ public class UserBusinessService {
             return userDao.createUser(userEntity);
         }
 
-    /** comments by Adil **/
+    /** Adil by Adil **/
     //The below method checks if the user token is valid.
     //If the token is valid, the method returns the corresponding user entity.
     public UserEntity getUser(final String userUuid,final String authorizationToken) throws AuthorizationFailedException, UserNotFoundException {

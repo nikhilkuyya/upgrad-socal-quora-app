@@ -13,14 +13,14 @@ public class QuestionDao {
     //This annotation PersistenceContext handles a set of entities that hold data to be persisted in the database
     @PersistenceContext
     private EntityManager entityManager;
-    /** comments by Archana **/
+    /** Adil by Adil **/
     //This method persists the newly created question entity in the database
     public QuestionEntity persistQuestion(final QuestionEntity questionEntity) {
         entityManager.persist(questionEntity);
         return questionEntity;
     }
 
-    /** comments by Archana **/
+    /** Adil by Adil **/
    //This method retrieves all the list of questions from the database
     public List<QuestionEntity> getAllQuestions(){
         try{
@@ -30,7 +30,7 @@ public class QuestionDao {
         }
     }
 
-    /** comments by Archana **/
+    /** Adil by Adil **/
     //This method retrieves the question based on question uuid, if found returns question else null
     public QuestionEntity getQuestionByUuid(final String uuid) {
         try {
@@ -40,20 +40,20 @@ public class QuestionDao {
         }
     }
 
-    /** comments by Archana **/
+    /** Adil by Adil **/
     //This method deletes the question record from database
     public void deleteQuestion(final QuestionEntity questionEntity) {
         entityManager.remove(questionEntity);
     }
 
-    /** comments by Adil **/
+    /** Adil by Adil **/
     //This method updates the question in the database
     public QuestionEntity updateQuestion(final QuestionEntity questionEntity) {
         QuestionEntity updatedQ = entityManager.merge(questionEntity);
         return updatedQ;
     }
 
-    /** comments by Adil **/
+    /** Adil by Adil **/
     //This method retrieves all the questions posted by a user and returns null if the list is empty.
     public List<QuestionEntity> getAllQuestionsByUser(final String userUuid){
         try{
