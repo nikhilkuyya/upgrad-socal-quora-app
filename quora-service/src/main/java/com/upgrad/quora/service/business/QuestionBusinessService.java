@@ -105,7 +105,7 @@ public class QuestionBusinessService {
         return questionUuid;
    }
 
-    /** comments by Avia **/
+    /** comments by Adil **/
     //This method retrieves the question in the database
     public QuestionEntity getQuestion(final String questionUuid, final String accessToken) throws InvalidQuestionException{
 
@@ -117,7 +117,7 @@ public class QuestionBusinessService {
 
     }
 
-    /** comments by Avia **/
+    /** comments by Adil **/
     //** editQuestion **//
     //This method updates the question in the database
     //THe method first checks if the user token is valid
@@ -148,7 +148,7 @@ public class QuestionBusinessService {
 
     }
 
-    /** comments by Avia **/
+    /** comments by Adil **/
     //** getAllQuestionsByUser **//
     //This method updates the question in the database retrieves all the questions post by a user from the database
 

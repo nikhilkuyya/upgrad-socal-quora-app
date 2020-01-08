@@ -50,7 +50,7 @@ public class UserBusinessService {
             return userDao.createUser(userEntity);
         }
 
-    /** comments by Avia **/
+    /** comments by Adil **/
     //The below method checks if the user token is valid.
     //If the token is valid, the method returns the corresponding user entity.
     public UserEntity getUser(final String userUuid,final String authorizationToken) throws AuthorizationFailedException, UserNotFoundException {
